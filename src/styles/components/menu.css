@@ -1,0 +1,15 @@
+.mantine-Menu-item {
+  /* on hover: data-hovered */
+  &[data-hovered='true'] {
+    background-color: var(--mantine-color-gray-9);
+  }
+}
+
+.mantine-Menu-dropdown {
+  background-color: var(--mantine-color-dark-7);
+  border-color: var(--mantine-color-gray-9);
+}
+
+.mantine-Menu-divider {
+  border-color: var(--mantine-color-gray-9);
+}
