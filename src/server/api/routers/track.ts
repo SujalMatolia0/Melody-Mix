@@ -44,14 +44,17 @@ export const trackRouter = createTRPCRouter({
       const [data, count] = await ctx.db.$transaction([
         dataPromise,
         countPromise,
-      ]);
+      ]); 
 
       return {
         tracks: data,
         total: count,
         query: input,
+  
       };
     }),
+
+
 
   new: protectedProcedure
     .input(SongZod.New)
@@ -62,7 +65,8 @@ export const trackRouter = createTRPCRouter({
           artist: input.artist,
           image: input.image,
           source: input.source,
-          length: 0,
+          length: input.length,
+          type: input.type,
         },
       });
     }),

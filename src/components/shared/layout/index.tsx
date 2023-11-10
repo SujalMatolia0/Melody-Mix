@@ -6,6 +6,8 @@ import { ExternalHeaderComp } from '../header/external';
 import { InternalHeaderComp } from '../header/internal';
 import { NavbarComp } from '../navbar';
 import { PlayerFooterComp } from '../footer/player';
+import { ProfileHeaderComp } from '../header/profile';
+import { ProfileNavbarComp } from '../navbar/profile';
 
 const HeadersObj = {
   external: {
@@ -15,6 +17,10 @@ const HeadersObj = {
   internal: {
     height: 45,
     Component: InternalHeaderComp,
+  },
+  profile: {
+    height: 45,
+    Component: ProfileHeaderComp,
   },
   none: {
     height: 0,
@@ -38,6 +44,10 @@ const NavbarObj = {
   normal: {
     width: 300,
     Component: NavbarComp,
+  },
+  profile: {
+    width: 300,
+    Component: ProfileNavbarComp
   },
   none: {
     width: 0,

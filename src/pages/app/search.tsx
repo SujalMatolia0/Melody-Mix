@@ -1,4 +1,6 @@
-import { Image, Card, Space, Stack, Title, Text } from "@mantine/core";
+import React from "react";
+import { Stack, Group, TextInput } from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
 import { type GetServerSidePropsContext } from "next";
 import { MainLayout } from "~/components/shared/layout";
 import { MusicProvider } from "~/lib/context/music/music.ctx";
@@ -11,6 +13,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       redirect: {
         destination: "/signin",
+        permanent: false,
       },
     };
   }
@@ -21,46 +24,32 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function AppPage() {
+  const [searchText, setSearchText] = React.useState("");
+
   return (
     <>
       <MusicProvider>
         <MainLayout header="internal" navbar="normal" footer="player">
           <Stack>
-            <Stack gap={2}>
-              <Title order={4}>Top hits </Title>
-              <Card
-                shadow="lg"
-                padding="lg"
-                style={{
-                  maxWidth: 140,
-                  background: "gray",
-                }}
-              >
-                <Card.Section className="overflow-visible py-2">
-                  <Image
-                    src="https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/f101ee52097223.590463d3471b4.jpg"
-                    alt="album"
-                    style={{
-                      border: "5px solid gray",
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                </Card.Section>
-                <Card.Section>
-                  <Stack gap={0}>
-                    <Text fz="md" pl="8px" pt="3px" fw={500}>
-                      song name
-                    </Text>
-                    <Text fz="sm" pl="8px" pb="2px">
-                      artist
-                    </Text>
-                  </Stack>
-                </Card.Section>
-              </Card>
-              <Space h="xs" />
-            </Stack>
+            <Group>
+              <Group style={{ position: "relative" }}>
+                <TextInput
+                  variant="filled"
+                  placeholder="Search..."
+                  size="md"
+                  value={searchText}
+                />
+                <IconSearch
+                  height="19"
+                  style={{
+                    position: "absolute",
+                    right: "10px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                  }}
+                />
+              </Group>
+            </Group>
           </Stack>
         </MainLayout>
       </MusicProvider>

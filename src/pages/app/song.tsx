@@ -3,6 +3,7 @@ import { type GetServerSidePropsContext } from "next";
 import { MainLayout } from "~/components/shared/layout";
 import { MusicProvider } from "~/lib/context/music/music.ctx";
 import { getServerAuthSession } from "~/server/auth";
+import { api } from "~/utils/api";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerAuthSession(context);
@@ -19,6 +20,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     props: {},
   };
 }
+
 
 export default function AppPage() {
   return (
