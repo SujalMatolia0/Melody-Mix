@@ -13,8 +13,7 @@ const MusicProvider = ({ children }: { children: React.ReactNode }) => {
   const playerRef = useRef<ReactHowler | null>(null);
 
   const [PlayerState, setPlayerState] = useSetState<PlayerStateType>({
-    source:
-      'https://bafybeid52tk3ezrjm5yc4iv47itgjyp55ibvqjrr7selwapv3ne7d2bipe.ipfs.w3s.link/SpotifyMate.com%20-%20Hasti%20Rahe%20Tu%20-%20Paradox.mp3',
+    source: 'https://bafybeid52tk3ezrjm5yc4iv47itgjyp55ibvqjrr7selwapv3ne7d2bipe.ipfs.w3s.link/SpotifyMate.com%20-%20Hasti%20Rahe%20Tu%20-%20Paradox.mp3',
     playing: false,
     volume: 0.1,
     progress: 0,
@@ -23,6 +22,9 @@ const MusicProvider = ({ children }: { children: React.ReactNode }) => {
     mute: false,
     duration: 0,
     loaded: false,
+    avatar: undefined,
+    title: undefined,
+    artist: undefined
   });
 
   const internalProgressUpdate = () => {

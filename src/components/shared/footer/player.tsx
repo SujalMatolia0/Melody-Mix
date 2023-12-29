@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
+import { useSetState } from "@mantine/hooks";
 import {
   IconArrowsShuffle,
   IconPlayerPauseFilled,
@@ -21,12 +22,25 @@ import {
   IconHeart,
   IconHeartFilled,
 } from "@tabler/icons-react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useMusicContext } from "~/lib/context/music/music.ctx";
+import { api } from "~/utils/api";
 
 export const PlayerFooterComp = () => {
+  
   const { PlayerState, setPlayerState, setProgress } = useMusicContext();
-  const [isLiked, setIsLiked] = useState(false);
+const [isLiked, setIsLiked] = useState(false);
+const { query : songId } = useRouter();
+
+
+
+if (typeof songId === 'string') {
+  console.log("found")
+  const { data: tracks = [] } = api.track.play.useQuery(songId);
+} else {
+   console.log("Track not Found", songId);
+}
 
   return (
     <Group justify="space-between" h="100%" px="xl" grow>

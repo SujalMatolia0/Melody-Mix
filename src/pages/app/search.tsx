@@ -1,10 +1,11 @@
 import React from "react";
-import { Stack, Group, TextInput } from "@mantine/core";
+import { Stack, Group, TextInput, Title, Divider, Text, Card } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import { type GetServerSidePropsContext } from "next";
 import { MainLayout } from "~/components/shared/layout";
 import { MusicProvider } from "~/lib/context/music/music.ctx";
 import { getServerAuthSession } from "~/server/auth";
+import { api } from "~/utils/api";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerAuthSession(context);
@@ -25,31 +26,54 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 export default function AppPage() {
   const [searchText, setSearchText] = React.useState("");
+  const { data: tracks = [], error, isLoading } = api.track.get.useQuery(searchText);
+
+  const handleSearch = (e: any) => {
+    setSearchText(e.target.value);
+  };
 
   return (
     <>
       <MusicProvider>
         <MainLayout header="internal" navbar="normal" footer="player">
           <Stack>
-            <Group>
-              <Group style={{ position: "relative" }}>
+            <Group style={{ position: "relative" }}>
+              <Stack>
                 <TextInput
-                  variant="filled"
+                  radius="md"
+                  variant="unstyled"
                   placeholder="Search..."
                   size="md"
+                  rightSection={<IconSearch />}
                   value={searchText}
-                />
-                <IconSearch
-                  height="19"
+                  onChange={handleSearch}
                   style={{
-                    position: "absolute",
-                    right: "10px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
+                    outline: "2px solid white",
+                    outlineOffset: "3px",
+                    borderRadius: "5px",
                   }}
                 />
-              </Group>
+                <Title order={5}>Recents</Title>
+                {isLoading ? (
+                  <p>Loading...</p>
+                ) : error ? (
+                  <p>No Track Found</p>
+                ) : (
+                  tracks.map((track) => (
+                    <Card key={track.id} shadow="md" padding="md" radius="md" style={{ marginBottom: "15px" }}>
+                    <Text size="lg"  style={{ marginBottom: "8px" }}>
+                      {track.title}
+                    </Text>
+                    <Text size="sm" style={{ marginBottom: "8px" }}>
+                      Artist: {track.artist}
+                    </Text>
+                   
+                  </Card>
+                  ))
+                )}
+              </Stack>
             </Group>
+            <Divider />
           </Stack>
         </MainLayout>
       </MusicProvider>

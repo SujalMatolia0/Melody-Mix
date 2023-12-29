@@ -1,4 +1,7 @@
 export type PlayerStateType = {
+  avatar: string | null | undefined;
+  title: ReactNode;
+  artist: ReactNode;
   source: string | null;
   playing: boolean;
   volume: number;

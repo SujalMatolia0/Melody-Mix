@@ -1,11 +1,11 @@
-import { Image, Card, Space, Stack, Title, Text } from "@mantine/core";
+import { Image, Card, Space, Stack, Title, Text, Divider } from "@mantine/core";
 import { useSetState } from "@mantine/hooks";
 import { type GetServerSidePropsContext } from "next";
-import { pages } from "next/dist/build/templates/app-page";
-import { Children } from "react";
+import router from "next/router";
+import { Children, useState } from "react";
 import { MainLayout } from "~/components/shared/layout";
 import { MusicProvider } from "~/lib/context/music/music.ctx";
-import { WorldZod } from "~/lib/zod";
+import { type WorldZod } from "~/lib/zod";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/utils/api";
 
@@ -32,6 +32,13 @@ export default function AppPage() {
   });
 
   const trackapi = api.track.list.useQuery(Pagination);
+  const [isHovered, setIsHovered] = useState(false);
+  const handleCardClick = (songId: any) => {
+   
+    router.push({
+      query: { songId: String(songId) }
+    });
+  };
 
   return (
     <>
@@ -39,27 +46,41 @@ export default function AppPage() {
         <MainLayout header="internal" navbar="normal" footer="player">
           <Stack>
             <Stack gap={2}>
-              <Title order={4}>Top hits </Title>
+              <Title order={2}>Listen Now ...</Title>
+              <Title order={6}>Top picks for you</Title>
+
+              <Divider mb={8} mt={4} />
               {Children.toArray(
                 trackapi.data?.tracks.map((data) => (
                   <Card
                     shadow="lg"
                     padding="lg"
                     style={{
-                      maxWidth: 140,
-                      background: "gray",
+                      maxWidth: 180,
+                      background: "none",
                     }}
+                    onClick={() => handleCardClick(data.id)}
                   >
-                    <Card.Section className="overflow-visible py-2">
+                    <Card.Section
+                      className="overflow-hidden py-2"
+                      style={{
+                        overflow: "hidden",
+                      }}
+                    >
                       <Image
                         src={data.image}
                         alt="album"
                         style={{
-                          border: "5px solid gray",
-                          width: "100%",
-                          height: "100%",
+                          width: "180px",
+                          height: "200px",
                           objectFit: "cover",
+                          transform: isHovered ? "scale(1.1)" : "scale(1)",
+                          transition: "transform 0.3s",
+                          borderRadius: "8px",
+                          overflowBlock: "hidden",
                         }}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
                       />
                     </Card.Section>
                     <Card.Section>
@@ -67,7 +88,7 @@ export default function AppPage() {
                         <Text fz="md" pl="8px" pt="3px" fw={500}>
                           {data.title}
                         </Text>
-                        <Text fz="sm" pl="8px" pb="2px">
+                        <Text fz="xs" pl="8px" pb="2px">
                           {data.artist}
                         </Text>
                       </Stack>
@@ -75,10 +96,14 @@ export default function AppPage() {
                   </Card>
                 ))
               )}
+
               <Space h="xs" />
             </Stack>
             <Stack gap={2}>
-              <Title order={4}>Your top mix </Title>
+              <Title order={2}>Just For You</Title>
+              <Title order={6}>Your moods</Title>
+
+              <Divider mb={8} mt={4} />
               <Card
                 shadow="lg"
                 padding="lg"

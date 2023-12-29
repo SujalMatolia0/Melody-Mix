@@ -6,11 +6,12 @@ import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const trackRouter = createTRPCRouter({
   get: protectedProcedure.input(z.string()).query(async ({ input, ctx }) => {
-    const track = await ctx.db.song.findUnique({
+    const tracks = await ctx.db.song.findMany({
       where: {
-        id: input,
+        title: {
+          contains: input,
+        },
       },
-
       select: {
         id: true,
         artist: true,
@@ -20,16 +21,43 @@ export const trackRouter = createTRPCRouter({
         title: true,
       },
     });
-
-    if (!track) {
+  
+    if (!tracks || tracks.length === 0) {
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: 'Track not found',
+        message: 'Tracks not found',
       });
+    }
+  
+    return tracks;
+  }),
+
+  play: protectedProcedure.input(z.string()).query(async ({ input, ctx }) => {
+    const track = await ctx.db.song.findUnique({
+        where: {
+            id: input,
+        },
+        select: {
+            id: true,
+            artist: true,
+            image: true,
+            PlaylistId: true,
+            source: true,
+            title: true,
+        },
+    });
+
+    if (!track) {
+        throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Track not found',
+        });
     }
 
     return track;
-  }),
+}),
+
+  
 
   list: protectedProcedure
     .input(WorldZod.Pagination)
