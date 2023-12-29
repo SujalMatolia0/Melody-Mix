@@ -31,16 +31,18 @@ export const PlayerFooterComp = () => {
   
   const { PlayerState, setPlayerState, setProgress } = useMusicContext();
 const [isLiked, setIsLiked] = useState(false);
-const { query : songId } = useRouter();
-
+const { query: { songId } } = useRouter();
 
 
 if (typeof songId === 'string') {
-  console.log("found")
+  console.log("found", songId);
   const { data: tracks = [] } = api.track.play.useQuery(songId);
+
 } else {
-   console.log("Track not Found", songId);
+  console.log("Track not Found or invalid songId:", songId);
+ 
 }
+
 
   return (
     <Group justify="space-between" h="100%" px="xl" grow>

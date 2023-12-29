@@ -33,12 +33,22 @@ export default function AppPage() {
 
   const trackapi = api.track.list.useQuery(Pagination);
   const [isHovered, setIsHovered] = useState(false);
-  const handleCardClick = (songId: any) => {
-   
-    router.push({
-      query: { songId: String(songId) }
-    });
+  const handleCardClick = async (songId: unknown) => {
+    if (typeof songId === 'string' || typeof songId === 'number') {
+      await router.push({
+        query: { songId: String(songId) }
+      }).catch(error => {
+        console.error('Error while routing:', error);
+        // Handle the routing error
+      });
+    } else {
+      // Handle the case where songId is not a string or number
+      console.error('Invalid songId type:', typeof songId);
+      // You might throw an error, log it, or handle it differently based on your requirements
+    }
   };
+  
+  
 
   return (
     <>
